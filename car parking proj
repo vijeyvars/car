@@ -7,7 +7,7 @@
 class vehicle
 {
  char custname[30];
- char vechno[10];
+ char vechno[20];
  long int phnum;
  int slotnum;
  float tim;
@@ -96,7 +96,7 @@ void arrival()
   cout<<"available no of slots:"<<count;
   cout<<"\nenter the details of the vehicles:"<<endl;
   vehicle e;
-  ofstream fw("carparking.dat",ios::out|ios::binary);
+  ofstream fw("carparking.dat",ios::app|ios::binary);
   char ch='y';
   while(ch=='y')
   {
@@ -107,14 +107,14 @@ void arrival()
   }
 }
 void search()
-{
+{ char ch='y';
   vehicle e;
   int slot;
   cout<<"Enter the slot number to check:";
   cin>>slot;
   ifstream fr("carparking.dat",ios::app|ios::binary);
-  while(!fr.eof())
-  {
+  while(ch=='y')
+  { ch='n';
     fr.read((char *)&e,sizeof(e));
     if(e.getslot()==slot)
     {
@@ -140,4 +140,3 @@ int availableslot(char ch)
    return slot;
   }
 }
-
