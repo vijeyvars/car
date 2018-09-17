@@ -41,7 +41,7 @@ class vehicle
    return slotnum;
   }
 }v;
-
+ int slot=100;
 void arrival();
 int availableslot(char ch);
 void search();
@@ -129,8 +129,7 @@ void search()
 
 int availableslot(char ch)
 {
-  int slot=100;
-  if(ch=='n')
+ if(ch=='n')
   {
    slot=slot-1;
    return slot;
