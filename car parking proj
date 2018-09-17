@@ -1,0 +1,144 @@
+#include<fstream.h>
+#include<conio.h>
+#include<string.h>
+#include<process.h>
+#include<time.h>
+#include<stdio.h>
+class vehicle
+{
+ char custname[30];
+ char vechno[10];
+ long int phnum;
+ int slotnum;
+ float tim;
+ public:
+ void getdata()
+  {
+    cout<<"Enter customer name:";
+    gets(custname);
+    cout<<"Enter vehicle number(eg:TN41AC2234):";
+    gets(vechno);
+    cout<<"Enter customer phone no:";
+    cin>>phnum;
+    cout<<"Enter check in time:";
+    cin>>tim;
+    cout<<"Enter the slotnumber:";
+    cin>>slotnum;
+  }
+/* int billcalc(float ,float )
+  {
+  }*/
+ void disp()
+  {
+   cout<<"customer name    :"<<custname<<endl;
+   cout<<"vehicle number   :"<<vechno<<endl;
+   cout<<"customer phone no:"<<phnum<<endl;
+   cout<<"check in time    :"<<tim<<endl;
+   cout<<"slotnumber       :"<<slotnum<<endl;
+  }
+ int getslot()
+  {
+   return slotnum;
+  }
+}v;
+
+void arrival();
+int availableslot(char ch);
+void search();
+
+void main()
+{
+  clrscr();
+  int ch;
+  while(1)
+  {
+
+   cout<<"\t\t\t\t***MAIN MENU***"<<endl;
+   cout<<"1.vehicle arrival"<<endl;
+   cout<<"2.search particular vehicles"<<endl;
+   cout<<"3.modify the details"<<endl;
+   cout<<"4.insert"<<endl;
+   cout<<"5.vehicle exit"<<endl;
+   cout<<"6.Display all records"<<endl;
+   cout<<"7.exit"<<endl;
+   cout<<"Enter the option that u want to perform:";
+   cin>>ch;
+   switch(ch)
+   {
+    case 1:
+	   arrival();
+	   break;
+    case 2:
+	   search();
+	   break;
+  /*  case 3:
+	   modify();
+	   break;
+    case 4:
+	   insert();
+	   break;
+   case 5:
+	  vehicleexit();
+	  break;
+   case 6:
+	  display();
+	  break;  */
+   case 7:
+	  exit(0);
+	  break;
+  }
+ }
+  getch();
+}
+void arrival()
+{
+  int count=availableslot('n');
+  cout<<"available no of slots:"<<count;
+  cout<<"\nenter the details of the vehicles:"<<endl;
+  vehicle e;
+  ofstream fw("carparking.dat",ios::out|ios::binary);
+  char ch='y';
+  while(ch=='y')
+  {
+    e.getdata();
+    fw.write((char *)&e,sizeof(e));
+    cout<<"do u want to enter more records:";
+    cin>>ch;
+  }
+}
+void search()
+{
+  vehicle e;
+  int slot;
+  cout<<"Enter the slot number to check:";
+  cin>>slot;
+  ifstream fr("carparking.dat",ios::app|ios::binary);
+  while(!fr.eof())
+  {
+    fr.read((char *)&e,sizeof(e));
+    if(e.getslot()==slot)
+    {
+	cout<<"the data to be searched is:"<<endl;
+	e.disp();
+    }
+    else
+    cout<<"file not found"<<endl;
+  }
+}
+
+
+int availableslot(char ch)
+{
+  int slot=100;
+  if(ch=='n')
+  {
+   slot=slot-1;
+   return slot;
+  }
+  else
+  {
+   slot=slot+1;
+   return slot;
+  }
+}
+
