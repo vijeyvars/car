@@ -10,3 +10,63 @@ fr.read((char*)&p,sizeof(p));
 if((fr.eof()) break;
 p.disp();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void main()
+{  ifstream fio("stu.dat"ios::in);
+   ofstream file("temp.dat"',ios::out);
+   int rno;  char found='f',confirm='n';
+   cout<<"enter roll no to students whose record is to be deleted\n";
+   cin>>rno;
+   while(!fio.eof())
+   { 
+     fio.read((char*)&s1,size of(s1));
+     if(s1.getno()==rno)
+     {  s1.putdata();
+        found='t';
+        cout<<"are you sure,you want to delete this record?(y/n)..";
+        cin>>confirm;
+        if(confirm=='n')
+        file.write((char*)&s1,sizeof(s1));
+     }
+     else
+     file.write((char*)&s1,sizeof(s1));
+   }
+   if(found=='f')cout<<"record not found!!\n";
+   fio.close();
+   file.close();
+   remove("stu.dat");
+   rename(temp.dat","stu.dat");
+   fio.open("stu.dat",ios::in);
+   cout<<"now the file contains\n";
+   while(!fio.eof())
+   {
+     fio.read((char*)&stud,sizeof(stud));
+     if(fio.eof())break;
+     stud.putdata;
+   }
+   fio.close();
+   return 0;
+}
