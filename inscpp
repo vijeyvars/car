@@ -1,0 +1,41 @@
+void main()
+{
+  ifstream fi("stu.dat",ios::in|ios::binary);
+  ofstream fo("temp.dat",ios::out|ios::binary);
+  char last='y';
+  cout<<"enter details of vehicles whose record is too be inserted\n";
+  s1.getdata();
+  while(!fi.eof())
+  { fi.read((char*)&stud,sizeof(stud));
+    if(s1.getrno()<=stud.getrno())
+    {  fo.write((char*)&s1,sizeof(s1));
+       last='n'; 
+       break;
+    }
+    else
+    fo.write((char*)&stud,sizeof(stud));
+  }
+  if(last=='y')
+  fo.write((char*)&s1,sizeof(s1));
+  else if(!fi.eof())
+  {  while(!fi.eof())
+     {  fi.read((char*)&stud,sizeof(stud);
+        fo.write((char*)&stud,sizeof(stud);
+     } 
+  } 
+  fi.close();
+  fo.close(); 
+  remove("stu.dat");
+  rename("temp.dat","stu.dat");
+  fi.open("stu.dat",ios::in);
+  cout<<"file now contains/n";
+  while(!fi.eof())
+  { 
+    fi.read((char*)&stud,sizeof(stud);
+    if(fi.eof())
+    break;
+    stud.putdata();
+  }
+  fi.close();
+  return 0;
+}
