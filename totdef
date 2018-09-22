@@ -1,0 +1,353 @@
+#include<fstream.h>
+#include<conio.h>
+#include<string.h>
+#include<process.h>
+#include<time.h>
+#include<stdio.h>
+class vehicle
+{
+ char custname[30];
+ char vechno[20];
+ char phnum[10];
+ int slotnum;
+ float tim;
+ public:
+ void getdata()
+  {
+    cout<<"Enter customer name:";
+    gets(custname);
+    cout<<"Enter vehicle number(eg:TN41AC2234):";
+    gets(vechno);
+    cout<<"Enter customer phone no:";
+    gets(phnum);
+    cout<<"Enter check in time:";
+    cin>>tim;
+    cout<<"Enter the slotnumber:";
+    cin>>slotnum;
+  }
+/* int billcalc()
+  {
+  }*/
+ void disp()
+  {
+   cout<<"customer name    :"<<custname<<endl;
+   cout<<"vehicle number   :";
+   puts(vechno);
+   cout<<"customer phone no:";
+   puts(phnum);
+   cout<<"check in time    :";
+   cout<<tim<<endl;
+   cout<<"slotnumber       :"<<slotnum<<endl;
+   cout<<endl;
+   cout<<endl;
+  }
+ int getslot()
+  {
+   return slotnum;
+  }
+ void mod()
+ {
+ cout<<"record to be modified";
+ cout<<"Slot number:"<<slotnum<<endl;
+ cout<<"customer name:"<<custname<<endl;
+ cout<<"vehicle number:"<<vechno<<endl;
+ cout<<"                               ENTER NEW DETAILS                    "<<endl;
+ char cuname[30];
+ char veh[20];
+ char ph[10];
+ cout<<"Enter 1 to retain old data"<<endl;
+ cout<<"Enter the new customer name:";
+ gets(cuname);
+ cout<<"Enter the new vehicle number:";
+ gets(veh);
+ cout<<"Enter the new phone number:";
+ gets(ph);
+ if(strcmp(cuname,"1")!=0)
+ strcpy(custname,cuname);
+ if(strcmp(veh,"1")!=0)
+ strcpy(vechno,veh);
+ if(strcmp(ph,"1")!=0)
+ strcpy(phnum,ph);
+ }
+}v;
+  int slot=100;
+void arrival();
+int availableslot(char ch);
+void search();
+void display();
+void modify();
+//void insert();
+void vehexit();
+void entrymenu();
+//void billingmenu();
+void editmenu();
+void exitmenu();
+void main()
+{
+  clrscr();
+  int ch;
+  while(1)
+  {
+  cout<<"\t\t\t\t***MAIN MENU***"<<endl;
+  cout<<"1.Entry menu"<<endl;
+  cout<<"2.Billing menu"<<endl;
+  cout<<"3.Edit menu"<<endl;
+  cout<<"4.Exit menu"<<endl;
+  cout<<"5.exit"<<endl;
+  cout<<"Enter the choice:";
+  cin>>ch;
+  switch(ch)
+  {
+  case 1:
+	entrymenu();
+	break;
+ // case 2:
+       //	billingmenu();
+       //	break;
+  case 3:
+	editmenu();
+	break;
+  case 4:
+	exitmenu();
+	break;
+  case 5:
+	exit(0);
+  }
+  }
+  getch();
+}
+void entrymenu()
+{
+  int ch=0;
+  while(ch!=2)
+  {
+   cout<<"\t\t\t\tENTRY MENU"<<endl;
+   cout<<"1.vehicle arrival"<<endl;
+   cout<<"2.Back to main menu"<<endl;
+   cout<<"Enter the choice:";
+   cin>>ch;
+   switch(ch)
+   {
+   case 1:
+	 arrival();
+	 break;
+   case 2:
+	 break;
+   }
+  }
+}
+/*void billingmenu()
+{
+  int ch=0;
+   while(ch!=2)
+  {
+   cout<<"\t\t\t\tBILLING MENU"<<endl;
+   cout<<"1.Billing"<<endl;
+   cout<<"2.Back to main menu"<<endl;
+   cout<<"Enter the choice:";
+   cin>>ch;
+   switch(ch)
+   {
+   case 1:
+	 v.billcalc();
+	 break;
+   case 2:
+	 break;
+   }
+  }
+ }*/
+void editmenu()
+{
+  int ch=0;
+   while(ch!=5)
+  {
+   cout<<"\t\t\t\tBILLING MENU"<<endl;
+   cout<<"1.Search details"<<endl;
+   cout<<"2.Modify details"<<endl;
+   cout<<"3.Insert details"<<endl;
+   cout<<"4.Display all details"<<endl;
+   cout<<"5.Back to main menu"<<endl;
+   cout<<"Enter the choice:";
+   cin>>ch;
+   switch(ch)
+   {
+   case 1:
+	 search();
+	 break;
+   case 2:
+	 modify();
+	 break;
+  // case 3:
+  //	 insert();
+  //break;
+   case 4:
+	 display();
+	 break;
+   case 5:
+	 break;
+   }
+  }
+}
+void exitmenu()
+{
+  int ch=0;
+   while(ch!=2)
+  {
+   cout<<"\t\t\t\tBILLING MENU"<<endl;
+   cout<<"1.Vehicle exit"<<endl;
+   cout<<"2.Back to main menu"<<endl;
+   cout<<"Enter the choice:";
+   cin>>ch;
+   switch(ch)
+   {
+   case 1:
+	 vehexit();
+	 break;
+   case 2:
+	 break;
+   }
+  }
+}
+void arrival()
+{ char c;
+  int count=availableslot('n');
+  cout<<"available no of slots:"<<count;
+  cout<<"Do you want to display all records(y/n):";
+  cin>>c;
+  if(c=='y')
+  {
+  display();
+  }
+  cout<<"\nenter the details of the vehicles:"<<endl;
+  vehicle e;
+  ofstream fw("car.dat",ios::app|ios::binary);
+  char ch='y';
+  while(ch=='y')
+  {
+    e.getdata();
+    fw.write((char *)&e,sizeof(e));
+    cout<<"do u want to enter more records:";
+    cin>>ch;
+  }
+  fw.close();
+}
+void search()
+{ char ch='n';
+  vehicle e;
+  int slot;
+  cout<<"Enter the slot number to check:";
+  cin>>slot;
+  ifstream fr("car.dat",ios::in|ios::binary);
+  while(!fr.eof())
+  {
+   fr.read((char *)&e,sizeof(e));
+   if(e.getslot()==slot)
+    {
+	cout<<"the data to be searched is:"<<endl;
+	e.disp();
+	ch='y';
+	break;
+    }
+  }
+     if(ch=='n')
+     cout<<"record not found!!!!";
+    fr.close();
+}
+void display()
+{
+vehicle p;
+ifstream fr;
+fr.open("car.dat",ios::in|ios::binary);
+fr.seekg(0);
+while(!fr.eof())
+{
+fr.read((char*)&p,sizeof(p));
+if(fr.eof())
+break;
+else
+p.disp();
+}
+fr.close();
+}
+void modify()
+{
+vehicle a,s;
+fstream f("cara.dat",ios::in|ios::out|ios::binary);
+int slot;
+long pos;
+char ch='f';
+cout<<"Enter the slot number to modify:";
+cin>>slot;
+while(!f.eof())
+{
+pos=f.tellg();
+f.read((char *)&a,sizeof(a));
+if(a.getslot()==slot)
+{
+a.mod();
+f.seekg(pos);
+f.write((char *)&a,sizeof(a));
+ch='t';
+break;
+}
+}
+if(ch=='f')
+cout<<"record not found!!!";
+f.seekg(0);
+cout<<"modified record:";
+while(!f.eof())
+{
+f.read((char *)&a,sizeof(a));
+a.disp();
+break;
+}
+f.close();
+}
+void vehexit()
+{
+   vehicle s1;
+   ifstream fr("car.dat",ios::in);
+   ofstream fw("temp.dat",ios::out);
+   int slot;
+   char found='f';
+   char confirm='n';
+   cout<<"Enter slot number to delete:";
+   cin>>slot;
+   while(!fr.eof())
+   {
+     fr.read((char*)&s1,sizeof(s1));
+     if(s1.getslot()==slot)
+     {  s1.disp();
+	found='t';
+	cout<<"are you sure,you want to delete this record?(y/n)..";
+	cin>>confirm;
+	if(confirm=='n')
+	fw.write((char*)&s1,sizeof(s1));
+     }
+     else
+     fw.write((char*)&s1,sizeof(s1));
+   }
+   if(found=='f')
+   {
+   cout<<"record not found!!\n";
+   }
+   fr.close();
+   fw.close();
+   remove("car.dat");
+   rename("temp.dat","car.dat");
+   cout<<"now the file contains\n";
+   display();
+}
+int availableslot(char ch)
+{
+  if(ch=='n')
+  {
+   slot=slot-1;
+   return slot;
+  }
+  else
+  {
+   slot=slot+1;
+   return slot;
+  }
+}
