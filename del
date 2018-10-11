@@ -1,6 +1,6 @@
 void main()
-{  ifstream fio("stu.dat"ios::in);
-   ofstream file("temp.dat"',ios::out);
+{  ifstream fio("stu.dat",ios::in|ios::binary);
+   ofstream file("temp.dat"',ios::out|ios::binary);
    int rno;  char found='f',confirm='n';
    cout<<"enter roll no to students whose record is to be deleted\n";
    cin>>rno;
