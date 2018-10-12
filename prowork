@@ -1,0 +1,417 @@
+#include<fstream.h>
+#include<conio.h>
+#include<string.h>
+#include<time.h>
+#include<process.h>
+#include<stdio.h>
+class vehicle
+{
+ char custname[30];
+ char vechno[20];
+ char phnum[15];
+ int slotnum;
+ float tim;
+ public:
+ void getdata()
+  {
+    cout<<"Enter customer name:";
+    gets(custname);
+    cout<<"Enter vehicle number(eg:TN41AC2234):";
+    gets(vechno);
+    cout<<"Enter customer phone no:";
+    gets(phnum);
+    cout<<"Enter check in time:";
+    cin>>tim;
+    cout<<"Enter the slotnumber:";
+    cin>>slotnum;
+  }
+ float billcalc(float b,float c)
+  {
+  float a;
+  a=b-c;
+  float rs=a*30;
+  return rs;
+  }
+ void disp()
+  {
+   cout<<"customer name    :"<<custname<<endl;
+   cout<<"vehicle number   :";
+   puts(vechno);
+   cout<<"customer phone no:";
+   puts(phnum);
+   cout<<"check in time    :";
+   cout<<tim<<endl;
+   cout<<"slotnumber       :"<<slotnum<<endl;
+   cout<<endl;
+   cout<<endl;
+  }
+ int getslot()
+  {
+   return slotnum;
+  }
+  float gettime()
+  {
+  return tim;
+  }
+ void mod()
+ {
+ cout<<"Record to be modified"<<endl;
+ cout<<"Slot number   :"<<slotnum<<endl;
+ cout<<"customer name :"<<custname<<endl;
+ cout<<"vehicle number:"<<vechno<<endl;
+ cout<<"                               ENTER NEW DETAILS                    "<<endl;
+ char cuname[30];
+ char veh[20];
+ char ph[15];
+ cout<<"Enter 1 to retain old data"<<endl;
+ cout<<"Enter the new customer name:";
+ gets(cuname);
+ cout<<"Enter the new vehicle number:";
+ gets(veh);
+ cout<<"Enter the new phone number:";
+ gets(ph);
+ if(strcmp(cuname,"1")!=0)
+ strcpy(custname,cuname);
+ if(strcmp(veh,"1")!=0)
+ strcpy(vechno,veh);
+ if(strcmp(ph,"1")!=0)
+ strcpy(phnum,ph);
+ }
+}v;
+int slotn=100;
+void arrival();
+int availableslot(char ch);
+void search();
+void display();
+void billdisp(int a,float b,float c,float d,char e[]);
+void modify();
+void insert();
+void vehexit();
+void entrymenu();
+void billing();
+void editmenu();
+void exitmenu();
+void main()
+{
+  clrscr();
+  int ch;
+  while(1)
+  {
+  clrscr();
+  cout<<"\t\t\t\t***MAIN MENU***"<<endl;
+  cout<<"1.Entry menu"<<endl;
+  cout<<"2.Edit menu"<<endl;
+  cout<<"3.Exit menu"<<endl;
+  cout<<"4.exit from program"<<endl;
+  cout<<"Enter the choice:";
+  cin>>ch;
+  switch(ch)
+  {
+  case 1:
+	entrymenu();
+	break;
+  case 2:
+	editmenu();
+	break;
+  case 3:
+	exitmenu();
+	break;
+  case 4:
+	exit(0);
+  }
+  }
+}
+void entrymenu()
+{
+  clrscr();
+  int ch=0;
+  while(ch!=2)
+  {
+   cout<<"\t\t\t\tENTRY MENU"<<endl;
+   cout<<"1.vehicle arrival"<<endl;
+   cout<<"2.Back to main menu"<<endl;
+   cout<<"Enter the choice:";
+   cin>>ch;
+   switch(ch)
+   {
+   case 1:
+	 arrival();
+	 break;
+   case 2:
+	 break;
+   }
+  }
+}
+void editmenu()
+{
+  clrscr();
+  int ch=0;
+   while(ch!=5)
+  {
+   cout<<"\t\t\t\tEDIT MENU"<<endl;
+   cout<<"1.Search details"<<endl;
+   cout<<"2.Modify details"<<endl;
+   cout<<"3.Insert details"<<endl;
+   cout<<"4.Display all details"<<endl;
+   cout<<"5.Back to main menu"<<endl;
+   cout<<"Enter the choice:";
+   cin>>ch;
+   switch(ch)
+   {
+   case 1:
+	 search();
+	 break;
+   case 2:
+	 modify();
+	 break;
+   case 3:
+	 insert();
+	 break;
+   case 4:
+	 display();
+	 break;
+   case 5:
+	 break;
+   }
+  }
+}
+void exitmenu()
+{
+  clrscr();
+  int ch=0;
+   while(ch!=2)
+  {
+   cout<<"\t\t\t\tEXIT MENU"<<endl;
+   cout<<"1.Vehicle exit"<<endl;
+   cout<<"2.Back to main menu"<<endl;
+   cout<<"Enter the choice:";
+   cin>>ch;
+   switch(ch)
+   {
+   case 1:
+	 vehexit();
+	 break;
+   case 2:
+	 break;
+   }
+  }
+}
+void arrival()
+{
+  clrscr();
+  char c;
+  int count=availableslot('n');
+  cout<<"available no of slots:"<<count<<endl;
+  cout<<"Do you want to display all records(y/n):";
+  cin>>c;
+  if(c=='y')
+  {
+  display();
+  }
+  cout<<"\nEnter the details of the vehicles:"<<endl;
+  vehicle e;
+  ofstream fw("carz.dat",ios::out|ios::binary);
+  char ch='y';
+  while(ch=='y')
+  {
+    e.getdata();
+    fw.write((char *)&e,sizeof(e));
+    cout<<"do u want to enter more records:";
+    cin>>ch;
+  }
+  fw.close();
+}
+void search()
+{
+  clrscr();
+  char ch='n';
+  vehicle e;
+  int slot;
+  cout<<"Enter the slot number to check:";
+  cin>>slot;
+  ifstream fr("carz.dat",ios::in|ios::binary);
+  while(!fr.eof())
+  {
+   fr.read((char *)&e,sizeof(e));
+   if(e.getslot()==slot)
+    {
+	cout<<"the data to be searched is:"<<endl;
+	e.disp();
+	ch='y';
+	break;
+    }
+  }
+     if(ch=='n')
+     cout<<"record not found!!!!";
+    fr.close();
+}
+void display()
+{
+clrscr();
+vehicle p;
+ifstream fr;
+fr.open("carz.dat",ios::in|ios::binary);
+fr.seekg(0);
+while(!fr.eof())
+{
+fr.read((char*)&p,sizeof(p));
+if(fr.eof())
+break;
+p.disp();
+cout<<"press any key to proceed....."<<endl<<endl;
+getch();
+}
+fr.close();
+}
+void insert()
+{
+clrscr();
+vehicle s1,c;
+  ifstream fi("carz.dat",ios::in|ios::binary);
+  ofstream fo("temp.dat",ios::out|ios::binary);
+  char last='y';
+  cout<<"enter details of vehicles whose record is to be inserted\n";
+  s1.getdata();
+  while(!fi.eof())
+  { fi.read((char*)&c,sizeof(c));
+    if(s1.getslot()<=c.getslot())
+    {  fo.write((char*)&s1,sizeof(s1));
+       last='n';
+       break;
+    }
+    else
+    fo.write((char*)&c,sizeof(c));
+  }
+  if(last=='y')
+  fo.write((char*)&s1,sizeof(s1));
+  else if(!fi.eof())
+  {  while(!fi.eof())
+     {  fi.read((char*)&c,sizeof(c));
+	fo.write((char*)&c,sizeof(c));
+     }
+  }
+  fi.close();
+  fo.close();
+  remove("carz.dat");
+  rename("temp.dat","carz.dat");
+}
+void modify()
+{
+  clrscr();
+vehicle a,q;
+fstream f("carz.dat",ios::in|ios::out|ios::binary);
+int slot;
+long pos;
+char ch='f';
+cout<<"Enter the slot number to modify:";
+cin>>slot;
+while(!f.eof())
+{
+pos=f.tellg();
+f.read((char *)&a,sizeof(a));
+if(a.getslot()==slot)
+{
+a.mod();
+f.seekg(pos);
+f.write((char *)&a,sizeof(a));
+ch='t';
+break;
+}
+}
+if(ch=='f')
+cout<<"record not found!!!"<<endl;
+else
+cout<<"Record Modified!!!"<<endl;
+f.close();
+}
+void vehexit()
+{
+   clrscr();
+   vehicle s1;
+   float extim,a;
+   char b[30];
+   ifstream fr("carz.dat",ios::in|ios::binary);
+   ofstream fw("temp.dat",ios::out|ios::binary);
+   int slot;
+   char found='f';
+   char confirm='n';
+   cout<<"Enter slot number to exit:";
+   cin>>slot;
+   cout<<"Enter the time of exit:";
+   cin>>extim;
+   cout<<"enter the customer name:";
+   gets(b);
+   while(!fr.eof())
+   {
+     fr.read((char*)&s1,sizeof(s1));
+     if(s1.getslot()==slot)
+     {  s1.disp();
+	a=s1.gettime();
+	found='t';
+	cout<<"Are you sure,you want to delete this record?(y/n).."<<endl;
+	cin>>confirm;
+	if(confirm=='n')
+	fw.write((char*)&s1,sizeof(s1));
+     }
+     else
+     fw.write((char*)&s1,sizeof(s1));
+
+   }
+   if(found=='f')
+   cout<<"Record not found!!!"<<endl;
+   else
+   {
+   cout<<"Record deleted!!!"<<endl;
+   fr.close();
+   fw.close();
+   remove("carz.dat");
+   rename("temp.dat","carz.dat");
+   availableslot('d');
+   float rps=v.billcalc(extim,a);
+   billdisp(slot,rps,a,extim,b);
+   }
+}
+void billdisp(int a,float b,float c,float d,char e[])
+{
+   clrscr();
+   vehicle r;
+   cout<<"----------------------------------------------------------------------------"<<endl;
+   cout<<"\t\t\t\tBILL"<<endl;
+   cout<<"----------------------------------------------------------------------------"<<endl;
+   cout<<endl;
+   cout<<"\t\t\tDJN PARKING AGENCY"<<endl;
+   cout<<endl;
+   cout<<endl;
+   time_t curtime;
+   curtime=time(NULL);
+   tm *tm_local=localtime(&curtime);
+   cout<<"Time:"<<tm_local->tm_hour<<":"<<tm_local->tm_min<<":"<<tm_local->tm_sec;
+   cout<<endl;
+   cout<<endl;
+   cout<<"Slot Number  :"<<a<<endl;
+   cout<<"entry time   :"<<c<<endl;
+   cout<<"exit time    :"<<d<<endl;
+   cout<<"customer name:"<<e<<endl;
+   cout<<endl;
+   cout<<endl;
+   cout<<"Amount:"<<b<<endl;
+   cout<<"Additional Tax:"<<"8.10"<<endl;
+   cout<<"Total amount:"<<b+8.10;
+   cout<<endl;
+   cout<<endl;
+   cout<<"\t\t\tTHANK YOU"<<endl;
+   cout<<"----------------------------------------------------------------------------"<<endl;
+}
+int availableslot(char ch)
+{
+  if(ch=='n')
+  {
+   slotn=slotn-1;
+   return slotn;
+  }
+  else
+  {
+   slotn=slotn+1;
+   return slotn;
+  }
+}
