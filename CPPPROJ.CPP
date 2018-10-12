@@ -1,6 +1,6 @@
 #include<fstream.h>
 #include<conio.h>
-#include<string.h>
+#include<string.h>6r7ery5reu 7m8k,d46oty7p;p7ltl76o76tk8tfk8
 #include<time.h>
 #include<process.h>
 #include<stdio.h>
